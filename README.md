@@ -31,7 +31,3 @@ After installing and activating the DagPay plugin in your Wordpress Admin Panel,
     * Redirect URLs to redirect back to your store from the payment view depending on the final outcome of the transaction (can be set the same for all states). For example [https://mywoocommercestore.com/order-received/](https://mywoocommercestore.com/order-received/)
 4. Save the environment and copy the generated environment ID, user ID and secret keys to the corresponding fields in the plugin **Settings** -> **DagPay**
 	* If you wish to use DagPay test environment, which enables you to test DagPay payments using Testnet Dags, enable **Test mode**. Please note, for Test mode you must create a separate account on [test.dagpay.io](https://test.dagpay.io), create an integration and generate environment credentials there. Environment credentials generated on [dagpay.io](https://dagpay.io/) are 'Live' credentials and will not work for Test mode.
-
-## Plugin limitations
-
-* Current plugin version supports USD & EUR currencies in your WooCommerce store. If your store base currency is setup as anything else, the DagPay will return an error and you cannot proceed with payment. We are adding support also in the near future for all other currencies.
