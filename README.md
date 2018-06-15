@@ -14,7 +14,7 @@ DagPay helps you to accept lightning fast dagcoin payments directly from your eC
 This plugin requires WooCommerce, make sure you have WooCommerce installed.
 
 1. Start by signing up for a [DagPay account](https://dagpay.io/public).
-2. Download the latest version of the [DagPay plugin .zip file](#).
+2. Download the latest version of the [DagPay plugin .zip file](https://github.com/dagpay/woocommerce-plugin/releases/download/v1.0.0/dagcoin.zip).
 3. Install the latest version of the DagPay for WooCommerce plugin.
 	* Navigate to your **Wordpress Admin Panel**
 	* Select **Plugins** > **Add New** > **Upload Plugin**. 
