@@ -9,7 +9,8 @@ Plugin URI: https://dagpay.io/
 Description: DagPay payment gateway plugin for accepting dagcoin payments.
 Author: Dagcoin
 Author URI: https://dagcoin.org/
-Version: 1.0.0*/
+Version: 1.0.1
+*/
 
 add_action('plugins_loaded', 'woocommerce_gateway_dagcoin_init', 0);
 function woocommerce_gateway_dagcoin_init()
@@ -25,7 +26,7 @@ function woocommerce_gateway_dagcoin_init()
             $this->id = 'wc_gateway_dagpay';
             $this->method_title = __('DagPay', 'dagcoin');
             $this->method_description = __('DagPay payment gateway plugin for accepting dagcoin payments.', 'dagcoin');
-            $this->title = __('DagPay', 'dagcoin');
+            $this->title = __('Dagcoin', 'dagcoin');
             $this->has_fields = true;
             $this->iframemode = true;
             $this->supports = array(
@@ -305,7 +306,7 @@ function woocommerce_gateway_dagcoin_init()
     function dagcoin_gateway_icon($icon, $id)
     {
         if ($id === 'wc_gateway_dagpay') {
-            return '<img src="' . plugins_url('images/logo.svg', __FILE__) . '" alt="Dagpay" />';
+            return '<img src="' . plugins_url('images/logo.svg', __FILE__) . '" alt="Dagcoin" />';
         }
 
         return $icon;
