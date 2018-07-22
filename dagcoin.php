@@ -7,9 +7,9 @@ if (!defined('ABSPATH')) {
 Plugin Name: DagPay for WooCommerce
 Plugin URI: https://dagpay.io/
 Description: DagPay payment gateway plugin for accepting dagcoin payments.
-Author: Dagcoin
-Author URI: https://dagcoin.org/
-Version: 1.0.1
+Author: DagPay
+Author URI: https://dagpay.io/
+Version: 1.0.2
 */
 
 add_action('plugins_loaded', 'woocommerce_gateway_dagcoin_init', 0);
@@ -121,7 +121,7 @@ function woocommerce_gateway_dagcoin_init()
             $data = json_decode(file_get_contents('php://input'));
 
             $client = $this->get_client();
-            $signature = $client->get_invoice_info_signature($data);
+            $signature = $client->getInvoiceInfoSignature($data);
 
             if ($signature != $data->signature)
                 die();
@@ -191,7 +191,7 @@ function woocommerce_gateway_dagcoin_init()
 
             try {
                 $invoice_id = $this->get_invoice_id($order_id);
-                $invoice = $client->get_invoice_info($invoice_id);
+                $invoice = $client->getInvoiceInfo($invoice_id);
 
                 if ($this->is_invoice_unpaid($invoice)) {
                     $this->create_invoice($order);
@@ -212,7 +212,7 @@ function woocommerce_gateway_dagcoin_init()
 
             try {
                 if ($invoice_id)
-                    $client->cancel_invoice($invoice_id);
+                    $client->cancelInvoice($invoice_id);
             } catch (Exception $e) {
                 wc_add_notice(__('Payment error:', 'dagcoin') . ' ' . $e->getMessage(), 'error');
             }
@@ -223,7 +223,7 @@ function woocommerce_gateway_dagcoin_init()
             $client = $this->get_client();
 
             $order->add_order_note(isset($client));
-            $invoice = $client->create_invoice($order->get_id(), $order->get_currency(), $order->get_total());
+            $invoice = $client->createInvoice($order->get_id(), $order->get_currency(), $order->get_total());
             $this->set_invoice_id($order->get_id(), $invoice->id);
             $order->add_order_note( 'Dagcoin Invoice ID: ' . $invoice->id );
 
@@ -244,7 +244,7 @@ function woocommerce_gateway_dagcoin_init()
             try {
                 $invoice_id = $this->get_invoice_id($order_id);
                 if ($invoice_id)
-                    $invoice = $client->get_invoice_info($invoice_id);
+                    $invoice = $client->getInvoiceInfo($invoice_id);
 
                 if (!$invoice || !$this->is_invoice_unpaid($invoice)) {
                     $invoice = $this->create_invoice($order);
@@ -272,14 +272,14 @@ function woocommerce_gateway_dagcoin_init()
 
             $client = $this->get_client();
             $invoice_id = $this->get_invoice_id($order->get_id());
-            $invoice = $client->get_invoice_info($invoice_id);
+            $invoice = $client->getInvoiceInfo($invoice_id);
 
             if (!$this->is_invoice_unpaid($invoice))
                 return;
 
             if ($invoice->currencyAmount != $order->get_total()) {
                 update_post_meta($order->get_id(), '_dagcoin_invoice_id_cancelled', $invoice_id);
-                $client->cancel_invoice($invoice_id);
+                $client->cancelInvoice($invoice_id);
             }
         }
     }
