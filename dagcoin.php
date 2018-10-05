@@ -164,7 +164,7 @@ function woocommerce_gateway_dagcoin_init()
                 $this->environment_id,
                 $this->user_id,
                 $this->secret,
-                $this->test,
+                $this->test === 'yes' ? true : false,
                 'wordpress'
             );
         }
