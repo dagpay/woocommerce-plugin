@@ -4,10 +4,10 @@ if (!defined('ABSPATH')) {
 }
 
 /*
-Plugin Name: DagPay for WooCommerce
+Plugin Name: Dagpay for WooCommerce
 Plugin URI: https://dagpay.io/
-Description: DagPay payment gateway plugin for accepting dagcoin payments.
-Author: DagPay
+Description: Dagpay payment gateway plugin for accepting dagcoin payments.
+Author: Dagpay
 Author URI: https://dagpay.io/
 Version: 1.0.2
 */
@@ -24,8 +24,8 @@ function woocommerce_gateway_dagcoin_init()
         public function __construct()
         {
             $this->id = 'wc_gateway_dagpay';
-            $this->method_title = __('DagPay', 'dagcoin');
-            $this->method_description = __('DagPay payment gateway plugin for accepting dagcoin payments.', 'dagcoin');
+            $this->method_title = __('Dagpay', 'dagcoin');
+            $this->method_description = __('Dagpay payment gateway plugin for accepting dagcoin payments.', 'dagcoin');
             $this->title = __('Dagcoin', 'dagcoin');
             $this->has_fields = true;
             $this->iframemode = true;
@@ -63,14 +63,14 @@ function woocommerce_gateway_dagcoin_init()
                 'enabled' => array(
                     'title' => __('Enable', 'dagcoin'),
                     'type' => 'checkbox',
-                    'label' => __('Enable DagPay', 'dagcoin'),
+                    'label' => __('Enable Dagpay', 'dagcoin'),
                     'default' => 'yes'
                 ),
                 'test' => array(
                     'title' => __('Test mode', 'dagcoin'),
                     'type' => 'checkbox',
                     'label' => __('Enable test mode', 'dagcoin'),
-                    'description' => __('To test in <a href="https://test.dagpay.io/">DagPay test environment</a>, enable test mode. Please note, for test mode you must create a separate account on test.dagpay.io, create an integration and generate environment credentials there. Environment credentials generated on dagpay.io are "Live" credentials and will not work for test mode.', 'dagcoin'),
+                    'description' => __('To test in <a href="https://test.dagpay.io/">Dagpay test environment</a>, enable test mode. Please note, for test mode you must create a separate account on test.dagpay.io, create an integration and generate environment credentials there. Environment credentials generated on dagpay.io are "Live" credentials and will not work for test mode.', 'dagcoin'),
                     'default' => 'no'
                 ),
                 'description' => array(
@@ -94,7 +94,7 @@ function woocommerce_gateway_dagcoin_init()
                     'title' => __('Secret', 'dagcoin'),
                     'type' => 'password',
                     'default' => '',
-                    'description' => __('Get required credentials from <a href="https://dagpay.io/">https://dagpay.io/</a>', 'dagcoin')
+                    'description' => __('Get required credentials from <a href="https://dagpay.io/">https://dagpay.io/</a> or <a href="https://test.dagpay.io/">https://test.dagpay.io/</a>', 'dagcoin')
                 )
             );
         }
