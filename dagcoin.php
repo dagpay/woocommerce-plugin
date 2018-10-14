@@ -312,8 +312,22 @@ function woocommerce_gateway_dagcoin_init()
         return $icon;
     }
 
+    function add_dagcoin_currency( $currencies ) {
+        $currencies['DAG'] = __( 'Dagcoin', 'dagcoin' );
+        return $currencies;
+    }
+
+    function add_dagcoin_currency_symbol( $currency_symbol, $currency ) {
+        switch( $currency ) {
+            case 'DAG': $currency_symbol = 'DAG'; break;
+        }
+        return $currency_symbol;
+    }
+
     add_action('woocommerce_order_after_calculate_totals', array(new WC_Gateway_Dagcoin(), 'recalculate_order'), 10, 2);
     add_filter('woocommerce_payment_gateways', 'woocommerce_add_gateway_dagcoin_gateway');
     add_filter('plugin_action_links', 'dagcoin_gateway_action_links', 10, 2);
     add_filter('woocommerce_gateway_icon', 'dagcoin_gateway_icon', 10, 2);
+    add_filter('woocommerce_currency_symbol', 'add_dagcoin_currency_symbol', 10, 2);
+    add_filter('woocommerce_currencies', 'add_dagcoin_currency');
 }
