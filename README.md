@@ -1,4 +1,4 @@
-# dagpay-woocommerce-plugin
+# Dagpay for WooCommerce
 
 Accept dagcoin payments on your WooCommerce store
 
