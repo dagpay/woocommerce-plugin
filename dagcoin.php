@@ -78,7 +78,7 @@ function woocommerce_gateway_dagcoin_init()
                     'type' => 'text',
                     'desc_tip' => true,
                     'description' => __('This controls the description which the user sees during checkout.', 'dagcoin'),
-                    'default' => __("Pay with your dagcoin wallet.", 'dagcoin'),
+                    'default' => __("Pay with your Dagcoin wallet!", 'dagcoin'),
                 ),
                 'environment_id' => array(
                     'title' => __('Environment ID', 'dagcoin'),
@@ -133,7 +133,7 @@ function woocommerce_gateway_dagcoin_init()
 //                case 'WAITING_FOR_CONFIRMATION': // ignore
                 case 'PAID':
                 case 'PAID_EXPIRED':
-                    $order->add_order_note( 'Dagcoin Invoice has been paid' );
+                    $order->add_order_note('Dagcoin Invoice has been paid');
                     $order->payment_complete();
                     break;
                 case 'CANCELLED':
@@ -142,15 +142,15 @@ function woocommerce_gateway_dagcoin_init()
                     else
                         $order->update_status('cancelled');
 
-                    $order->add_order_note( 'Dagcoin Invoice has been cancelled' );
+                    $order->add_order_note('Dagcoin Invoice has been cancelled');
                     break;
                 case 'EXPIRED':
                     $order->update_status('failed');
-                    $order->add_order_note( 'Dagcoin Invoice has expired' );
+                    $order->add_order_note('Dagcoin Invoice has expired');
                     break;
                 case 'FAILED':
                     $order->update_status('failed');
-                    $order->add_order_note( 'Dagcoin Invoice has failed' );
+                    $order->add_order_note('Dagcoin Invoice has failed');
                     break;
             }
 
@@ -169,15 +169,18 @@ function woocommerce_gateway_dagcoin_init()
             );
         }
 
-        private function get_invoice_id($order_id) {
+        private function get_invoice_id($order_id)
+        {
             return get_post_meta($order_id, '_dagcoin_invoice_id', true);
         }
 
-        private function set_invoice_id($order_id, $invoice_id) {
+        private function set_invoice_id($order_id, $invoice_id)
+        {
             update_post_meta($order_id, '_dagcoin_invoice_id', $invoice_id);
         }
 
-        private function is_invoice_unpaid($invoice) {
+        private function is_invoice_unpaid($invoice)
+        {
             return !in_array($invoice->state, array('EXPIRED', 'CANCELLED', 'FAILED'));
         }
 
@@ -225,7 +228,7 @@ function woocommerce_gateway_dagcoin_init()
             $order->add_order_note(isset($client));
             $invoice = $client->createInvoice($order->get_id(), $order->get_currency(), $order->get_total());
             $this->set_invoice_id($order->get_id(), $invoice->id);
-            $order->add_order_note( 'Dagcoin Invoice ID: ' . $invoice->id );
+            $order->add_order_note('Dagcoin Invoice ID: ' . $invoice->id);
 
             return $invoice;
         }
@@ -262,7 +265,7 @@ function woocommerce_gateway_dagcoin_init()
 
         private function is_dagcoin($order_id)
         {
-            return get_post_meta( $order_id, '_payment_method', true ) === 'dagcoin';
+            return get_post_meta($order_id, '_payment_method', true) === 'dagcoin';
         }
 
         public function recalculate_order($taxes, $order)
@@ -312,18 +315,22 @@ function woocommerce_gateway_dagcoin_init()
         return $icon;
     }
 
-    function add_dagcoin_currency( $currencies ) {
-        $currencies['DAG'] = __( 'Dagcoin', 'dagcoin' );
+    function add_dagcoin_currency($currencies)
+    {
+        $currencies['DAG'] = __('Dagcoin', 'dagcoin');
         return $currencies;
     }
 
-    function add_dagcoin_currency_symbol( $currency_symbol, $currency ) {
-        switch( $currency ) {
-            case 'DAG': $currency_symbol = 'DAG'; break;
+    function add_dagcoin_currency_symbol($currency_symbol, $currency)
+    {
+        switch ($currency) {
+            case 'DAG':
+                $currency_symbol = 'DAG';
+                break;
         }
         return $currency_symbol;
     }
-
+    
     add_action('woocommerce_order_after_calculate_totals', array(new WC_Gateway_Dagcoin(), 'recalculate_order'), 10, 2);
     add_filter('woocommerce_payment_gateways', 'woocommerce_add_gateway_dagcoin_gateway');
     add_filter('plugin_action_links', 'dagcoin_gateway_action_links', 10, 2);
