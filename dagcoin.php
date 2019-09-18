@@ -3,13 +3,17 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+require __DIR__ . 'vendor/autoload.php';
+
+use Dagpay\DagpayClient;
+
 /*
 Plugin Name: Dagpay for WooCommerce
 Plugin URI: https://dagpay.io/
 Description: Dagpay payment gateway plugin for accepting dagcoin payments.
 Author: Dagpay
 Author URI: https://dagpay.io/
-Version: 1.0.2
+Version: 1.0.3
 */
 
 add_action('plugins_loaded', 'woocommerce_gateway_dagcoin_init', 0);
@@ -128,7 +132,7 @@ function woocommerce_gateway_dagcoin_init()
                 die();
             }
 
-            $order = new WC_Order((int) $data->paymentId);
+            $order = new WC_Order((int)$data->paymentId);
 
             switch ($data->state) {
 //                case 'PENDING': // ignore
@@ -166,8 +170,6 @@ function woocommerce_gateway_dagcoin_init()
 
         private function get_client()
         {
-            include_once(__DIR__ . '/lib/DagpayClient.php');
-
             return new DagpayClient(
                 $this->environment_id,
                 $this->user_id,

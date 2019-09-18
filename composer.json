@@ -1,7 +1,14 @@
 {
   "name": "dagpay/woocommerce-plugin",
-  "description": "Dagpay PHP Client",
+  "type": "project",
+  "keywords": [
+    "payment",
+    "dagcoin"
+  ],
+  "homepage": "https://github.com/dagpay/woocommerce-plugin",
+  "license": "MIT",
+  "description": "Dagpay for WooCommerce",
   "require": {
-    "dagpay/client-php": ""
+    "dagpay/client-php": "^1.0.5"
   }
 }
