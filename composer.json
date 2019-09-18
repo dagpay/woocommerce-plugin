@@ -1,0 +1,7 @@
+{
+  "name": "dagpay/woocommerce-plugin",
+  "description": "Dagpay PHP Client",
+  "require": {
+    "dagpay/client-php": ""
+  }
+}
