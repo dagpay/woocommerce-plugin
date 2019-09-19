@@ -9,6 +9,6 @@
   "license": "MIT",
   "description": "Dagpay for WooCommerce",
   "require": {
-    "dagpay/client-php": "^1.0.5"
+    "dagpay/client-php": "^1.0.6"
   }
 }
