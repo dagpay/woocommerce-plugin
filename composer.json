@@ -6,7 +6,7 @@
     "dagcoin"
   ],
   "homepage": "https://github.com/dagpay/woocommerce-plugin",
-  "license": "MIT",
+  "license": "GPL-3.0",
   "description": "Dagpay for WooCommerce",
   "require": {
     "dagpay/client-php": "^1.0.7"
