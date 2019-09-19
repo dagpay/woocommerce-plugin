@@ -26,6 +26,11 @@ function woocommerce_gateway_dagcoin_init()
 
     class WC_Gateway_Dagcoin extends WC_Payment_Gateway
     {
+        public $environment_id;
+        public $user_id;
+        public $secret;
+        public $test;
+
         public function __construct()
         {
             $this->id = 'wc_gateway_dagpay';
@@ -111,7 +116,7 @@ function woocommerce_gateway_dagcoin_init()
 
         public function is_available()
         {
-            if ($this->enabled == 'no') {
+            if ($this->enabled !== 'yes') {
                 return false;
             }
             if (!$this->environment_id || !$this->user_id || !$this->secret) {
@@ -123,16 +128,16 @@ function woocommerce_gateway_dagcoin_init()
 
         public function handle_invoice()
         {
-            $data = json_decode(file_get_contents('php://input'));
+            $data = json_decode(file_get_contents('php://input'), false);
 
             $client = $this->get_client();
-            $signature = $client->getInvoiceInfoSignature($data);
+            $signature = $client->get_invoice_info_signature($data);
 
-            if ($signature != $data->signature) {
+            if ($signature !== $data->signature) {
                 die();
             }
 
-            $order = new WC_Order((int)$data->paymentId);
+            $order = new WC_Order((int) $data->paymentId);
 
             switch ($data->state) {
 //                case 'PENDING': // ignore
@@ -174,7 +179,7 @@ function woocommerce_gateway_dagcoin_init()
                 $this->environment_id,
                 $this->user_id,
                 $this->secret,
-                $this->test === 'yes' ? true : false,
+                $this->test === 'yes',
                 'wordpress'
             );
         }
@@ -205,7 +210,7 @@ function woocommerce_gateway_dagcoin_init()
 
             try {
                 $invoice_id = $this->get_invoice_id($order_id);
-                $invoice = $client->getInvoiceInfo($invoice_id);
+                $invoice = $client->get_invoice_info($invoice_id);
 
                 if ($this->is_invoice_unpaid($invoice)) {
                     $this->create_invoice($order);
@@ -226,19 +231,28 @@ function woocommerce_gateway_dagcoin_init()
 
             try {
                 if ($invoice_id) {
-                    $client->cancelInvoice($invoice_id);
+                    $client->cancel_invoice($invoice_id);
                 }
             } catch (Exception $e) {
                 wc_add_notice(__('Payment error:', 'dagcoin') . ' ' . $e->getMessage(), 'error');
             }
         }
 
+        /**
+         * @param WC_Order $order
+         * @return array|mixed|object
+         */
         private function create_invoice($order)
         {
             $client = $this->get_client();
 
             $order->add_order_note(isset($client));
-            $invoice = $client->createInvoice($order->get_id(), $order->get_currency(), $order->get_total());
+            /* TODO: add these two to query to redirect the user back correctly.
+            $orderRecievedUrl = $order->get_checkout_order_received_url();
+            $returnUrl = $order->get_cancel_endpoint();
+            */
+
+            $invoice = $client->create_invoice($order->get_id(), $order->get_currency(), $order->get_total());
             $this->set_invoice_id($order->get_id(), $invoice->id);
             $order->add_order_note('Dagcoin Invoice ID: ' . $invoice->id);
 
@@ -248,7 +262,7 @@ function woocommerce_gateway_dagcoin_init()
         public function process_payment($order_id)
         {
             if (is_admin()) {
-                return;
+                return null;
             }
 
             global $woocommerce;
@@ -260,7 +274,7 @@ function woocommerce_gateway_dagcoin_init()
             try {
                 $invoice_id = $this->get_invoice_id($order_id);
                 if ($invoice_id) {
-                    $invoice = $client->getInvoiceInfo($invoice_id);
+                    $invoice = $client->get_invoice_info($invoice_id);
                 }
 
                 if (!$invoice || !$this->is_invoice_unpaid($invoice)) {
@@ -275,6 +289,7 @@ function woocommerce_gateway_dagcoin_init()
             } catch (Exception $e) {
                 wc_add_notice(__('Payment error:', 'dagcoin') . ' ' . $e->getMessage(), 'error');
             }
+            return null;
         }
 
         private function is_dagcoin($order_id)
@@ -282,15 +297,19 @@ function woocommerce_gateway_dagcoin_init()
             return get_post_meta($order_id, '_payment_method', true) === 'dagcoin';
         }
 
+        /**
+         * @param $taxes
+         * @param WC_Order $order
+         */
         public function recalculate_order($taxes, $order)
         {
-            if (!$this->is_dagcoin($order->id)) {
+            if (!$this->is_dagcoin($order->get_id())) {
                 return;
             }
 
             $client = $this->get_client();
             $invoice_id = $this->get_invoice_id($order->get_id());
-            $invoice = $client->getInvoiceInfo($invoice_id);
+            $invoice = $client->get_invoice_info($invoice_id);
 
             if (!$this->is_invoice_unpaid($invoice)) {
                 return;
@@ -298,7 +317,7 @@ function woocommerce_gateway_dagcoin_init()
 
             if ($invoice->currencyAmount != $order->get_total()) {
                 update_post_meta($order->get_id(), '_dagcoin_invoice_id_cancelled', $invoice_id);
-                $client->cancelInvoice($invoice_id);
+                $client->cancel_invoice($invoice_id);
             }
         }
     }
