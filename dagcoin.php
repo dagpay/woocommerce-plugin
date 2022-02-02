@@ -31,7 +31,7 @@ Plugin URI: https://dagpay.io/
 Description: Dagpay payment gateway plugin for accepting dagcoin payments.
 Author: Dagpay
 Author URI: https://dagpay.io/
-Version: 1.0.4
+Version: 1.1.0
 */
 
 add_action('plugins_loaded', 'woocommerce_gateway_dagcoin_init', 0);
